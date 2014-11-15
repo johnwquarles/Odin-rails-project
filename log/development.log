@@ -1,0 +1,2731 @@
+  [1m[36m (11.9ms)[0m  [1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [1m[35m (0.1ms)[0m  select sqlite_version(*)
+  [1m[36m (10.6ms)[0m  [1mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.2ms)[0m  SELECT "schema_migrations".* FROM "schema_migrations"
+Migrating to CreateArticles (20141114035352)
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.5ms)[0m  CREATE TABLE "articles" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar(255), "body" text, "created_at" datetime, "updated_at" datetime) 
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20141114035352"]]
+  [1m[35m (13.5ms)[0m  commit transaction
+Migrating to CreateComments (20141114145512)
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.4ms)[0m  CREATE TABLE "comments" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_name" varchar(255), "body" text, "article_id" integer, "created_at" datetime, "updated_at" datetime) 
+  [1m[36m (0.2ms)[0m  [1mCREATE  INDEX "index_comments_on_article_id" ON "comments" ("article_id")[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20141114145512"]]
+  [1m[36m (10.0ms)[0m  [1mcommit transaction[0m
+Migrating to CreateTags (20141115075728)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.4ms)[0m  [1mCREATE TABLE "tags" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20141115075728"]]
+  [1m[36m (10.4ms)[0m  [1mcommit transaction[0m
+Migrating to CreateTaggings (20141115075834)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.4ms)[0m  [1mCREATE TABLE "taggings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "tag_id" integer, "article_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35m (0.2ms)[0m  CREATE  INDEX "index_taggings_on_tag_id" ON "taggings" ("tag_id")
+  [1m[36m (0.1ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_taggings_on_tag_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_taggings_on_tag_id' AND type='index'
+[0m
+  [1m[35m (0.2ms)[0m  CREATE  INDEX "index_taggings_on_article_id" ON "taggings" ("article_id")
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20141115075834"]]
+  [1m[35m (13.8ms)[0m  commit transaction
+Migrating to AddPaperclipFieldsToArticle (20141115100944)
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.5ms)[0m  ALTER TABLE "articles" ADD "image_file_name" varchar(255)
+  [1m[36m (0.2ms)[0m  [1mALTER TABLE "articles" ADD "image_content_type" varchar(255)[0m
+  [1m[35m (0.2ms)[0m  ALTER TABLE "articles" ADD "image_file_size" integer
+  [1m[36m (0.2ms)[0m  [1mALTER TABLE "articles" ADD "image_uploaded_at" datetime[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20141115100944"]]
+  [1m[36m (8.8ms)[0m  [1mcommit transaction[0m
+Migrating to SorceryCore (20141115182634)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.5ms)[0m  [1mCREATE TABLE "authors" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "username" varchar(255) NOT NULL, "email" varchar(255) NOT NULL, "crypted_password" varchar(255) NOT NULL, "salt" varchar(255) NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35m (0.6ms)[0m  CREATE UNIQUE INDEX "index_authors_on_email" ON "authors" ("email")
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20141115182634"]]
+  [1m[35m (10.8ms)[0m  commit transaction
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_authors_on_email' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_authors_on_email' AND type='index'
+
+  [1m[36m (0.2ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_comments_on_article_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_comments_on_article_id' AND type='index'
+[0m
+  [1m[35m (0.2ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_taggings_on_article_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_taggings_on_article_id' AND type='index'
+
+  [1m[36m (0.2ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_taggings_on_tag_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_taggings_on_tag_id' AND type='index'
+[0m
+
+
+Started GET "/" for 126.69.111.36 at 2014-11-15 18:37:20 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Processing by ArticlesController#index as HTML
+  [1m[35mArticle Load (0.4ms)[0m  SELECT "articles".* FROM "articles"
+  Rendered articles/index.html.erb within layouts/application (4.9ms)
+Completed 200 OK in 1697ms (Views: 1672.7ms | ActiveRecord: 0.4ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 18:37:22 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 18:37:22 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 18:37:22 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 18:37:22 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 18:37:22 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 18:37:22 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 18:37:22 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 18:37:22 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 18:37:22 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 18:37:22 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 18:37:22 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 18:37:22 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 18:37:22 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 18:37:22 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 18:37:22 +0000
+
+
+Started GET "/login" for 126.69.111.36 at 2014-11-15 18:37:24 +0000
+Processing by AuthorSessionsController#new as HTML
+  Rendered author_sessions/new.html.erb within layouts/application (2.1ms)
+Completed 200 OK in 103ms (Views: 102.2ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/author_sessions" for 126.69.111.36 at 2014-11-15 18:37:28 +0000
+Processing by AuthorSessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"3PD3YzJj2zoksdh1ntGDqoB1tvIKx7fg7EsO9uutvJ0=", "email"=>"asdfasdf", "password"=>"[FILTERED]", "commit"=>"Login"}
+  [1m[36mAuthor Load (0.2ms)[0m  [1mSELECT  "authors".* FROM "authors"  WHERE (email = 'asdfasdf')  ORDER BY "authors"."id" ASC LIMIT 1[0m
+  Rendered author_sessions/new.html.erb within layouts/application (1.7ms)
+Completed 200 OK in 126ms (Views: 99.6ms | ActiveRecord: 0.7ms)
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 18:37:29 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 18:37:29 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 18:37:29 +0000
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 18:37:29 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 18:37:29 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 18:37:29 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 18:37:29 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 18:37:29 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 18:37:29 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 18:37:29 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 18:37:29 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 18:37:29 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 18:37:29 +0000
+
+
+Started GET "/authors" for 126.69.111.36 at 2014-11-15 18:37:45 +0000
+Processing by AuthorsController#index as HTML
+  [1m[35mAuthor Load (0.3ms)[0m  SELECT "authors".* FROM "authors"
+  Rendered authors/index.html.erb within layouts/application (1.7ms)
+Completed 200 OK in 106ms (Views: 104.2ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 18:37:46 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 18:37:46 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 18:37:46 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 18:37:46 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 18:37:46 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 18:37:46 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 18:37:46 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 18:37:46 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 18:37:46 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 18:37:46 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 18:37:46 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 18:37:46 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 18:37:46 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 18:37:46 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 18:37:46 +0000
+
+
+Started GET "/authors" for 126.69.111.36 at 2014-11-15 18:38:07 +0000
+Processing by AuthorsController#index as HTML
+  [1m[36mAuthor Load (0.3ms)[0m  [1mSELECT "authors".* FROM "authors"[0m
+  Rendered authors/index.html.erb within layouts/application (2.2ms)
+Completed 200 OK in 99ms (Views: 97.6ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:07 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:07 +0000
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:07 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:07 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:07 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:07 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:07 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:07 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:07 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:07 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:07 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:07 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:07 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:07 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:07 +0000
+
+
+Started GET "/authors/new" for 126.69.111.36 at 2014-11-15 18:38:09 +0000
+Processing by AuthorsController#new as HTML
+  Rendered authors/_form.html.erb (32.5ms)
+  Rendered authors/new.html.erb within layouts/application (38.4ms)
+Completed 200 OK in 133ms (Views: 131.2ms | ActiveRecord: 0.2ms)
+
+
+Started POST "/authors" for 126.69.111.36 at 2014-11-15 18:38:20 +0000
+Processing by AuthorsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"3PD3YzJj2zoksdh1ntGDqoB1tvIKx7fg7EsO9uutvJ0=", "author"=>{"username"=>"admin", "email"=>"admin@admin.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]"}, "commit"=>"Create Author"}
+  [1m[35m (0.2ms)[0m  begin transaction
+Binary data inserted for `string` type on column `crypted_password`
+  [1m[36mSQL (0.7ms)[0m  [1mINSERT INTO "authors" ("created_at", "crypted_password", "email", "salt", "updated_at", "username") VALUES (?, ?, ?, ?, ?, ?)[0m  [["created_at", "2014-11-15 18:38:20.439959"], ["crypted_password", "$2a$10$ew0qdMKIWZITu5/7XqYUGeyFqv0/x3mAmdyg.aR95pUt1CcSgK/Y."], ["email", "admin@admin.com"], ["salt", "t7FWqfN2niCrTv36Xsyp"], ["updated_at", "2014-11-15 18:38:20.439959"], ["username", "admin"]]
+  [1m[35m (11.8ms)[0m  commit transaction
+Redirected to https://rails-tutorial-johnwquarles.c9.io/authors/1
+Completed 302 Found in 165ms (ActiveRecord: 12.7ms)
+
+
+Started GET "/authors/1" for 126.69.111.36 at 2014-11-15 18:38:20 +0000
+Processing by AuthorsController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mAuthor Load (0.4ms)[0m  [1mSELECT  "authors".* FROM "authors"  WHERE "authors"."id" = ? LIMIT 1[0m  [["id", 1]]
+  Rendered authors/show.html.erb within layouts/application (1.2ms)
+Completed 200 OK in 106ms (Views: 103.1ms | ActiveRecord: 0.4ms)
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:20 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:20 +0000
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:20 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:20 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:20 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:20 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:20 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:20 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:20 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:20 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:20 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:20 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:20 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:20 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:20 +0000
+
+
+Started GET "/authors" for 126.69.111.36 at 2014-11-15 18:38:24 +0000
+Processing by AuthorsController#index as HTML
+  [1m[35mAuthor Load (0.3ms)[0m  SELECT "authors".* FROM "authors"
+  Rendered authors/index.html.erb within layouts/application (2.3ms)
+Completed 200 OK in 106ms (Views: 104.3ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/login" for 126.69.111.36 at 2014-11-15 18:38:25 +0000
+Processing by AuthorSessionsController#new as HTML
+  Rendered author_sessions/new.html.erb within layouts/application (1.1ms)
+Completed 200 OK in 97ms (Views: 96.4ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/author_sessions" for 126.69.111.36 at 2014-11-15 18:38:33 +0000
+Processing by AuthorSessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"3PD3YzJj2zoksdh1ntGDqoB1tvIKx7fg7EsO9uutvJ0=", "email"=>"admin@admin.com", "password"=>"[FILTERED]", "commit"=>"Login"}
+  [1m[36mAuthor Load (0.4ms)[0m  [1mSELECT  "authors".* FROM "authors"  WHERE (email = 'admin@admin.com')  ORDER BY "authors"."id" ASC LIMIT 1[0m
+  Rendered author_sessions/new.html.erb within layouts/application (0.9ms)
+Completed 200 OK in 241ms (Views: 97.5ms | ActiveRecord: 0.4ms)
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:33 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:33 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:33 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:33 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:33 +0000
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:33 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:33 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:33 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:33 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:33 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:33 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:33 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:33 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:33 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:33 +0000
+
+
+Started POST "/author_sessions" for 126.69.111.36 at 2014-11-15 18:38:40 +0000
+Processing by AuthorSessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"3PD3YzJj2zoksdh1ntGDqoB1tvIKx7fg7EsO9uutvJ0=", "email"=>"admin@admin.com", "password"=>"[FILTERED]", "commit"=>"Login"}
+  [1m[35mAuthor Load (0.3ms)[0m  SELECT  "authors".* FROM "authors"  WHERE (email = 'admin@admin.com')  ORDER BY "authors"."id" ASC LIMIT 1
+Redirected to https://rails-tutorial-johnwquarles.c9.io/articles
+Completed 302 Found in 142ms (ActiveRecord: 0.3ms)
+
+
+Started GET "/articles" for 126.69.111.36 at 2014-11-15 18:38:40 +0000
+Processing by ArticlesController#index as HTML
+  [1m[36mArticle Load (0.4ms)[0m  [1mSELECT "articles".* FROM "articles"[0m
+  Rendered articles/index.html.erb within layouts/application (1.2ms)
+  [1m[35mAuthor Load (0.3ms)[0m  SELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1
+Completed 200 OK in 109ms (Views: 106.8ms | ActiveRecord: 0.7ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:40 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:40 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:40 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:40 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:40 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:40 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 18:38:40 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:40 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:40 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:41 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:41 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:41 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:41 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:41 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 18:38:41 +0000
+
+
+Started GET "/authors" for 126.69.111.36 at 2014-11-15 18:40:56 +0000
+Processing by AuthorsController#index as HTML
+  [1m[36mAuthor Load (0.5ms)[0m  [1mSELECT "authors".* FROM "authors"[0m
+  Rendered authors/index.html.erb within layouts/application (8.5ms)
+  [1m[35mAuthor Load (0.3ms)[0m  SELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1
+Completed 200 OK in 136ms (Views: 130.5ms | ActiveRecord: 1.6ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 18:40:57 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 18:40:57 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 18:40:57 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 18:40:57 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 18:40:57 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 18:40:57 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 18:40:57 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 18:40:57 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 18:40:57 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 18:40:57 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 18:40:57 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 18:40:57 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 18:40:57 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 18:40:57 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 18:40:57 +0000
+
+
+Started GET "/logout" for 126.69.111.36 at 2014-11-15 18:40:59 +0000
+Processing by AuthorSessionsController#destroy as HTML
+  [1m[36mAuthor Load (0.5ms)[0m  [1mSELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1[0m
+Redirected to https://rails-tutorial-johnwquarles.c9.io/authors
+Completed 302 Found in 4ms (ActiveRecord: 0.5ms)
+
+
+Started GET "/authors" for 126.69.111.36 at 2014-11-15 18:40:59 +0000
+Processing by AuthorsController#index as HTML
+  [1m[35mAuthor Load (0.2ms)[0m  SELECT "authors".* FROM "authors"
+  Rendered authors/index.html.erb within layouts/application (2.0ms)
+Completed 200 OK in 109ms (Views: 107.0ms | ActiveRecord: 0.2ms)
+
+
+Started GET "/login" for 126.69.111.36 at 2014-11-15 18:41:01 +0000
+Processing by AuthorSessionsController#new as HTML
+  Rendered author_sessions/new.html.erb within layouts/application (1.6ms)
+Completed 200 OK in 103ms (Views: 101.5ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/author_sessions" for 126.69.111.36 at 2014-11-15 18:41:04 +0000
+Processing by AuthorSessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"PyELG3Ya6ginNFzEH60H3JfE/emTz/aWpLBMDbgc/BU=", "email"=>"asdfasdfasdf", "password"=>"[FILTERED]", "commit"=>"Login"}
+  [1m[36mAuthor Load (0.3ms)[0m  [1mSELECT  "authors".* FROM "authors"  WHERE (email = 'asdfasdfasdf')  ORDER BY "authors"."id" ASC LIMIT 1[0m
+  Rendered author_sessions/new.html.erb within layouts/application (0.7ms)
+Completed 200 OK in 99ms (Views: 96.8ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 18:41:04 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 18:41:04 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 18:41:04 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 18:41:04 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 18:41:04 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 18:41:04 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 18:41:04 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 18:41:04 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 18:41:04 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 18:41:04 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 18:41:04 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 18:41:04 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 18:41:04 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 18:41:04 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 18:41:04 +0000
+
+
+Started POST "/author_sessions" for 126.69.111.36 at 2014-11-15 18:41:09 +0000
+Processing by AuthorSessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"PyELG3Ya6ginNFzEH60H3JfE/emTz/aWpLBMDbgc/BU=", "email"=>"fdas", "password"=>"[FILTERED]", "commit"=>"Login"}
+  [1m[35mAuthor Load (0.3ms)[0m  SELECT  "authors".* FROM "authors"  WHERE (email = 'fdas')  ORDER BY "authors"."id" ASC LIMIT 1
+  Rendered author_sessions/new.html.erb within layouts/application (1.2ms)
+Completed 200 OK in 104ms (Views: 101.2ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 18:41:09 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 18:41:09 +0000
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 18:41:09 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 18:41:09 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 18:41:09 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 18:41:09 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 18:41:09 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 18:41:09 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 18:41:09 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 18:41:09 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 18:41:09 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 18:41:09 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 18:41:09 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 18:41:09 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 18:41:09 +0000
+
+
+Started GET "/authors" for 126.69.111.36 at 2014-11-15 18:41:58 +0000
+Processing by AuthorsController#index as HTML
+  [1m[36mAuthor Load (0.6ms)[0m  [1mSELECT "authors".* FROM "authors"[0m
+  Rendered authors/index.html.erb within layouts/application (8.2ms)
+Completed 200 OK in 117ms (Views: 111.6ms | ActiveRecord: 1.1ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 18:41:58 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 18:41:58 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 18:41:58 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 18:41:58 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 18:41:58 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 18:41:58 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 18:41:58 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 18:41:58 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 18:41:58 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 18:41:58 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 18:41:58 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 18:41:58 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 18:41:58 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 18:41:58 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 18:41:58 +0000
+
+
+Started GET "/login" for 126.69.111.36 at 2014-11-15 18:41:59 +0000
+Processing by AuthorSessionsController#new as HTML
+  Rendered author_sessions/new.html.erb within layouts/application (0.9ms)
+Completed 200 OK in 105ms (Views: 104.0ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/author_sessions" for 126.69.111.36 at 2014-11-15 18:42:02 +0000
+Processing by AuthorSessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"PyELG3Ya6ginNFzEH60H3JfE/emTz/aWpLBMDbgc/BU=", "email"=>"asdfasdf", "password"=>"[FILTERED]", "commit"=>"Login"}
+  [1m[35mAuthor Load (0.3ms)[0m  SELECT  "authors".* FROM "authors"  WHERE (email = 'asdfasdf')  ORDER BY "authors"."id" ASC LIMIT 1
+  Rendered author_sessions/new.html.erb within layouts/application (1.0ms)
+Completed 200 OK in 97ms (Views: 94.9ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 18:42:03 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 18:42:03 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 18:42:03 +0000
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 18:42:03 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 18:42:03 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 18:42:03 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 18:42:03 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 18:42:03 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 18:42:03 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 18:42:03 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 18:42:03 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 18:42:03 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 18:42:03 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 18:42:03 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 18:42:03 +0000
+
+
+Started GET "/authors" for 126.69.111.36 at 2014-11-15 18:45:44 +0000
+Processing by AuthorsController#index as HTML
+  [1m[36mAuthor Load (0.6ms)[0m  [1mSELECT "authors".* FROM "authors"[0m
+  Rendered authors/index.html.erb within layouts/application (8.1ms)
+Completed 200 OK in 113ms (Views: 108.0ms | ActiveRecord: 1.2ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 18:45:45 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 18:45:45 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 18:45:45 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 18:45:45 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 18:45:45 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 18:45:45 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 18:45:45 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 18:45:45 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 18:45:45 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 18:45:45 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 18:45:45 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 18:45:45 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 18:45:45 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 18:45:45 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 18:45:45 +0000
+
+
+Started GET "/login" for 126.69.111.36 at 2014-11-15 18:45:46 +0000
+Processing by AuthorSessionsController#new as HTML
+  Rendered author_sessions/new.html.erb within layouts/application (1.2ms)
+Completed 200 OK in 103ms (Views: 101.5ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/author_sessions" for 126.69.111.36 at 2014-11-15 18:45:49 +0000
+Processing by AuthorSessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"PyELG3Ya6ginNFzEH60H3JfE/emTz/aWpLBMDbgc/BU=", "email"=>"asdfasdfasdf", "password"=>"[FILTERED]", "commit"=>"Login"}
+  [1m[35mAuthor Load (0.3ms)[0m  SELECT  "authors".* FROM "authors"  WHERE (email = 'asdfasdfasdf')  ORDER BY "authors"."id" ASC LIMIT 1
+  Rendered author_sessions/new.html.erb within layouts/application (0.8ms)
+Completed 200 OK in 95ms (Views: 91.8ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 18:45:49 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 18:45:49 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 18:45:49 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 18:45:49 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 18:45:49 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 18:45:49 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 18:45:49 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 18:45:49 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 18:45:49 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 18:45:49 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 18:45:49 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 18:45:49 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 18:45:49 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 18:45:49 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 18:45:49 +0000
+
+
+Started POST "/author_sessions" for 126.69.111.36 at 2014-11-15 19:04:32 +0000
+Processing by AuthorSessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"PyELG3Ya6ginNFzEH60H3JfE/emTz/aWpLBMDbgc/BU=", "email"=>"asdfasdfasdf", "password"=>"[FILTERED]", "commit"=>"Login"}
+  [1m[36mAuthor Load (0.3ms)[0m  [1mSELECT  "authors".* FROM "authors"  WHERE (email = 'asdfasdfasdf')  ORDER BY "authors"."id" ASC LIMIT 1[0m
+  Rendered author_sessions/new.html.erb within layouts/application (0.8ms)
+Completed 200 OK in 95ms (Views: 92.9ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:04:33 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:04:33 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:04:33 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:04:33 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:04:33 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:04:33 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:04:33 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:04:33 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:04:33 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:04:33 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:04:33 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:04:33 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:04:33 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:04:33 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:04:33 +0000
+
+
+Started GET "/authors" for 126.69.111.36 at 2014-11-15 19:21:03 +0000
+Processing by AuthorsController#index as HTML
+  [1m[35mAuthor Load (0.3ms)[0m  SELECT "authors".* FROM "authors"
+  Rendered authors/index.html.erb within layouts/application (1.6ms)
+Completed 200 OK in 108ms (Views: 106.2ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:21:03 +0000
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:21:03 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:21:03 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:21:03 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:21:03 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:21:03 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:21:03 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:21:03 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:21:03 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:21:03 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:21:03 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:21:03 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:21:03 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:21:03 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:21:03 +0000
+
+
+Started GET "/authors" for 126.69.111.36 at 2014-11-15 19:23:48 +0000
+Processing by AuthorsController#index as HTML
+  [1m[36mAuthor Load (0.6ms)[0m  [1mSELECT "authors".* FROM "authors"[0m
+  Rendered authors/index.html.erb within layouts/application (9.7ms)
+Completed 200 OK in 108ms (Views: 102.8ms | ActiveRecord: 1.2ms)
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:23:49 +0000
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:23:49 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:23:49 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:23:49 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:23:49 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:23:49 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:23:49 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:23:49 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:23:49 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:23:49 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:23:49 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:23:49 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:23:49 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:23:49 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:23:49 +0000
+
+
+Started GET "/authors/new" for 126.69.111.36 at 2014-11-15 19:23:51 +0000
+Processing by AuthorsController#new as HTML
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "authors"
+Redirected to https://rails-tutorial-johnwquarles.c9.io/
+Filter chain halted as :zero_authors_or_authenticated rendered or redirected
+Completed 302 Found in 3ms (ActiveRecord: 0.3ms)
+
+
+Started GET "/" for 126.69.111.36 at 2014-11-15 19:23:51 +0000
+Processing by ArticlesController#index as HTML
+  [1m[36mArticle Load (0.3ms)[0m  [1mSELECT "articles".* FROM "articles"[0m
+  Rendered articles/index.html.erb within layouts/application (1.9ms)
+Completed 200 OK in 103ms (Views: 94.6ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/login" for 126.69.111.36 at 2014-11-15 19:23:59 +0000
+Processing by AuthorSessionsController#new as HTML
+  Rendered author_sessions/new.html.erb within layouts/application (1.7ms)
+Completed 200 OK in 119ms (Views: 116.9ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/login" for 126.69.111.36 at 2014-11-15 19:24:01 +0000
+Processing by AuthorSessionsController#new as HTML
+  Rendered author_sessions/new.html.erb within layouts/application (0.7ms)
+Completed 200 OK in 104ms (Views: 103.1ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/login" for 126.69.111.36 at 2014-11-15 19:24:03 +0000
+Processing by AuthorSessionsController#new as HTML
+  Rendered author_sessions/new.html.erb within layouts/application (0.7ms)
+Completed 200 OK in 118ms (Views: 117.3ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/author_sessions" for 126.69.111.36 at 2014-11-15 19:24:10 +0000
+Processing by AuthorSessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"PyELG3Ya6ginNFzEH60H3JfE/emTz/aWpLBMDbgc/BU=", "email"=>"admin@admin.com", "password"=>"[FILTERED]", "commit"=>"Login"}
+  [1m[35mAuthor Load (0.3ms)[0m  SELECT  "authors".* FROM "authors"  WHERE (email = 'admin@admin.com')  ORDER BY "authors"."id" ASC LIMIT 1
+Redirected to https://rails-tutorial-johnwquarles.c9.io/articles
+Completed 302 Found in 143ms (ActiveRecord: 0.3ms)
+
+
+Started GET "/articles" for 126.69.111.36 at 2014-11-15 19:24:10 +0000
+Processing by ArticlesController#index as HTML
+  [1m[36mArticle Load (0.2ms)[0m  [1mSELECT "articles".* FROM "articles"[0m
+  Rendered articles/index.html.erb within layouts/application (1.0ms)
+  [1m[35mAuthor Load (0.3ms)[0m  SELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1
+Completed 200 OK in 95ms (Views: 93.0ms | ActiveRecord: 0.5ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:10 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:10 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:10 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:10 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:10 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:10 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:10 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:10 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:10 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:10 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:10 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:10 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:10 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:10 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:11 +0000
+
+
+Started GET "/authors" for 126.69.111.36 at 2014-11-15 19:24:16 +0000
+Processing by AuthorsController#index as HTML
+  [1m[36mAuthor Load (0.3ms)[0m  [1mSELECT "authors".* FROM "authors"[0m
+  Rendered authors/index.html.erb within layouts/application (1.8ms)
+  [1m[35mAuthor Load (0.3ms)[0m  SELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1
+Completed 200 OK in 95ms (Views: 92.7ms | ActiveRecord: 0.6ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:16 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:16 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:16 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:16 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:16 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:16 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:16 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:16 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:16 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:16 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:16 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:16 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:16 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:16 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:16 +0000
+
+
+Started GET "/authors/new" for 126.69.111.36 at 2014-11-15 19:24:17 +0000
+Processing by AuthorsController#new as HTML
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "authors"[0m
+  [1m[35mAuthor Load (0.3ms)[0m  SELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1
+  Rendered authors/_form.html.erb (3.2ms)
+  Rendered authors/new.html.erb within layouts/application (4.9ms)
+Completed 200 OK in 105ms (Views: 95.3ms | ActiveRecord: 0.6ms)
+
+
+Started POST "/authors" for 126.69.111.36 at 2014-11-15 19:24:30 +0000
+Processing by AuthorsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"PyELG3Ya6ginNFzEH60H3JfE/emTz/aWpLBMDbgc/BU=", "author"=>{"username"=>"thisguy", "email"=>"thisguy@overthere.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]"}, "commit"=>"Create Author"}
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "authors"[0m
+  [1m[35mAuthor Load (0.2ms)[0m  SELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+Binary data inserted for `string` type on column `crypted_password`
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "authors" ("created_at", "crypted_password", "email", "salt", "updated_at", "username") VALUES (?, ?, ?, ?, ?, ?)  [["created_at", "2014-11-15 19:24:30.694691"], ["crypted_password", "$2a$10$YZk5OQvFpfYIx/bfHfvG0.sLrtq2oadAgmBblsHAW6UKVro//NNmC"], ["email", "thisguy@overthere.com"], ["salt", "91dXWH3qS6Xyaq5B68fg"], ["updated_at", "2014-11-15 19:24:30.694691"], ["username", "thisguy"]]
+  [1m[36m (11.5ms)[0m  [1mcommit transaction[0m
+Redirected to https://rails-tutorial-johnwquarles.c9.io/authors/2
+Completed 302 Found in 159ms (ActiveRecord: 12.5ms)
+
+
+Started GET "/authors/2" for 126.69.111.36 at 2014-11-15 19:24:30 +0000
+Processing by AuthorsController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[35mAuthor Load (0.4ms)[0m  SELECT  "authors".* FROM "authors"  WHERE "authors"."id" = ? LIMIT 1  [["id", 2]]
+  Rendered authors/show.html.erb within layouts/application (0.5ms)
+  [1m[36mAuthor Load (0.3ms)[0m  [1mSELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1[0m
+Completed 200 OK in 108ms (Views: 104.7ms | ActiveRecord: 0.6ms)
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:31 +0000
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:31 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:31 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:31 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:31 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:31 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:31 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:31 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:31 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:31 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:31 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:31 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:31 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:31 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:31 +0000
+
+
+Started GET "/logout" for 126.69.111.36 at 2014-11-15 19:24:35 +0000
+Processing by AuthorSessionsController#destroy as HTML
+  [1m[35mAuthor Load (0.4ms)[0m  SELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1
+Redirected to https://rails-tutorial-johnwquarles.c9.io/authors
+Completed 302 Found in 4ms (ActiveRecord: 0.4ms)
+
+
+Started GET "/authors" for 126.69.111.36 at 2014-11-15 19:24:35 +0000
+Processing by AuthorsController#index as HTML
+  [1m[36mAuthor Load (0.3ms)[0m  [1mSELECT "authors".* FROM "authors"[0m
+  Rendered authors/index.html.erb within layouts/application (2.3ms)
+Completed 200 OK in 105ms (Views: 103.0ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/authors/new" for 126.69.111.36 at 2014-11-15 19:24:37 +0000
+Processing by AuthorsController#new as HTML
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "authors"
+Redirected to https://rails-tutorial-johnwquarles.c9.io/
+Filter chain halted as :zero_authors_or_authenticated rendered or redirected
+Completed 302 Found in 7ms (ActiveRecord: 0.3ms)
+
+
+Started GET "/" for 126.69.111.36 at 2014-11-15 19:24:37 +0000
+Processing by ArticlesController#index as HTML
+  [1m[36mArticle Load (0.3ms)[0m  [1mSELECT "articles".* FROM "articles"[0m
+  Rendered articles/index.html.erb within layouts/application (1.1ms)
+Completed 200 OK in 109ms (Views: 107.1ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/articles/new" for 126.69.111.36 at 2014-11-15 19:24:40 +0000
+Processing by ArticlesController#new as HTML
+  Rendered articles/_form.html.erb (51.7ms)
+  Rendered articles/new.html.erb within layouts/application (54.1ms)
+Completed 200 OK in 165ms (Views: 161.6ms | ActiveRecord: 1.4ms)
+
+
+Started GET "/" for 126.69.111.36 at 2014-11-15 19:24:46 +0000
+Processing by ArticlesController#index as HTML
+  [1m[35mArticle Load (0.4ms)[0m  SELECT "articles".* FROM "articles"
+  Rendered articles/index.html.erb within layouts/application (1.2ms)
+Completed 200 OK in 107ms (Views: 105.1ms | ActiveRecord: 0.4ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:46 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:46 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:46 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:46 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:46 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:46 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:24:46 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:46 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:47 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:47 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:47 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:47 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:47 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:47 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:24:47 +0000
+
+
+Started GET "/articles/new" for 126.69.111.36 at 2014-11-15 19:24:50 +0000
+Processing by ArticlesController#new as HTML
+  Rendered articles/_form.html.erb (4.3ms)
+  Rendered articles/new.html.erb within layouts/application (5.9ms)
+Completed 200 OK in 111ms (Views: 109.0ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/articles" for 126.69.111.36 at 2014-11-15 19:25:45 +0000
+Processing by ArticlesController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"tWeFtnWVEqqiwJetXdwfC5LotNLHHLGd0IJn4Zt0te0=", "article"=>{"title"=>"I watched Ghostbusters the other day", "body"=>"I had never seen it before.\r\n\r\nSome might say that my childhood was incomplete.", "tag_list"=>""}, "commit"=>"Create Article"}
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "articles" ("body", "created_at", "title", "updated_at") VALUES (?, ?, ?, ?)  [["body", "I had never seen it before.\r\n\r\nSome might say that my childhood was incomplete."], ["created_at", "2014-11-15 19:25:45.183888"], ["title", "I watched Ghostbusters the other day"], ["updated_at", "2014-11-15 19:25:45.183888"]]
+  [1m[36m (11.7ms)[0m  [1mcommit transaction[0m
+Redirected to https://rails-tutorial-johnwquarles.c9.io/articles/1
+Completed 302 Found in 18ms (ActiveRecord: 12.2ms)
+
+
+Started GET "/articles/1" for 126.69.111.36 at 2014-11-15 19:25:45 +0000
+Processing by ArticlesController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[35mArticle Load (0.3ms)[0m  SELECT  "articles".* FROM "articles"  WHERE "articles"."id" = ? LIMIT 1  [["id", 1]]
+  [1m[36mTag Load (0.4ms)[0m  [1mSELECT "tags".* FROM "tags" INNER JOIN "taggings" ON "tags"."id" = "taggings"."tag_id" WHERE "taggings"."article_id" = ?[0m  [["article_id", 1]]
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "comments"  WHERE "comments"."article_id" = ?  [["article_id", 1]]
+  Rendered articles/_comment.html.erb (0.0ms)
+  Rendered comments/_form.html.erb (5.0ms)
+  Rendered articles/show.html.erb within layouts/application (26.2ms)
+Completed 200 OK in 129ms (Views: 117.5ms | ActiveRecord: 1.5ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:25:45 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:25:45 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:25:45 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:25:45 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:25:45 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:25:45 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:25:45 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:25:45 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:25:45 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:25:45 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:25:45 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:25:45 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:25:45 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:25:45 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:25:45 +0000
+
+
+Started GET "/articles" for 126.69.111.36 at 2014-11-15 19:25:51 +0000
+Processing by ArticlesController#index as HTML
+  [1m[36mArticle Load (0.3ms)[0m  [1mSELECT "articles".* FROM "articles"[0m
+  Rendered articles/index.html.erb within layouts/application (1.3ms)
+Completed 200 OK in 104ms (Views: 102.3ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/articles/1" for 126.69.111.36 at 2014-11-15 19:25:53 +0000
+Processing by ArticlesController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[35mArticle Load (0.2ms)[0m  SELECT  "articles".* FROM "articles"  WHERE "articles"."id" = ? LIMIT 1  [["id", 1]]
+  [1m[36mTag Load (0.2ms)[0m  [1mSELECT "tags".* FROM "tags" INNER JOIN "taggings" ON "tags"."id" = "taggings"."tag_id" WHERE "taggings"."article_id" = ?[0m  [["article_id", 1]]
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "comments"  WHERE "comments"."article_id" = ?  [["article_id", 1]]
+  Rendered articles/_comment.html.erb (0.0ms)
+  Rendered comments/_form.html.erb (2.4ms)
+  Rendered articles/show.html.erb within layouts/application (10.1ms)
+Completed 200 OK in 110ms (Views: 107.0ms | ActiveRecord: 0.5ms)
+
+
+Started GET "/login" for 126.69.111.36 at 2014-11-15 19:25:54 +0000
+Processing by AuthorSessionsController#new as HTML
+  Rendered author_sessions/new.html.erb within layouts/application (0.9ms)
+Completed 200 OK in 104ms (Views: 102.3ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/articles" for 126.69.111.36 at 2014-11-15 19:26:00 +0000
+Processing by ArticlesController#index as HTML
+  [1m[36mArticle Load (0.3ms)[0m  [1mSELECT "articles".* FROM "articles"[0m
+  Rendered articles/index.html.erb within layouts/application (1.3ms)
+Completed 200 OK in 104ms (Views: 102.6ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/login" for 126.69.111.36 at 2014-11-15 19:26:03 +0000
+Processing by AuthorSessionsController#new as HTML
+  Rendered author_sessions/new.html.erb within layouts/application (0.9ms)
+Completed 200 OK in 106ms (Views: 104.6ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/articles" for 126.69.111.36 at 2014-11-15 19:26:06 +0000
+Processing by ArticlesController#index as HTML
+  [1m[35mArticle Load (0.3ms)[0m  SELECT "articles".* FROM "articles"
+  Rendered articles/index.html.erb within layouts/application (1.3ms)
+Completed 200 OK in 105ms (Views: 103.2ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/authors" for 126.69.111.36 at 2014-11-15 19:26:08 +0000
+Processing by AuthorsController#index as HTML
+  [1m[36mAuthor Load (0.3ms)[0m  [1mSELECT "authors".* FROM "authors"[0m
+  Rendered authors/index.html.erb within layouts/application (2.5ms)
+Completed 200 OK in 96ms (Views: 94.5ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:26:09 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:26:09 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:26:09 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:26:09 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:26:09 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:26:09 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:26:09 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:26:09 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:26:09 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:26:09 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:26:09 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:26:09 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:26:09 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:26:09 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:26:09 +0000
+
+
+Started GET "/authors/new" for 126.69.111.36 at 2014-11-15 19:26:10 +0000
+Processing by AuthorsController#new as HTML
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "authors"
+Redirected to https://rails-tutorial-johnwquarles.c9.io/
+Filter chain halted as :zero_authors_or_authenticated rendered or redirected
+Completed 302 Found in 3ms (ActiveRecord: 0.3ms)
+
+
+Started GET "/" for 126.69.111.36 at 2014-11-15 19:26:10 +0000
+Processing by ArticlesController#index as HTML
+  [1m[36mArticle Load (0.3ms)[0m  [1mSELECT "articles".* FROM "articles"[0m
+  Rendered articles/index.html.erb within layouts/application (1.4ms)
+Completed 200 OK in 105ms (Views: 102.9ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/authors" for 126.69.111.36 at 2014-11-15 19:38:02 +0000
+Processing by AuthorsController#index as HTML
+Redirected to https://rails-tutorial-johnwquarles.c9.io/
+Filter chain halted as :require_login rendered or redirected
+Completed 302 Found in 2ms (ActiveRecord: 0.0ms)
+
+
+Started GET "/" for 126.69.111.36 at 2014-11-15 19:38:02 +0000
+Processing by ArticlesController#index as HTML
+  [1m[35mArticle Load (0.7ms)[0m  SELECT "articles".* FROM "articles"
+  Rendered articles/index.html.erb within layouts/application (10.5ms)
+Completed 200 OK in 128ms (Views: 118.8ms | ActiveRecord: 1.4ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:02 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:02 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:02 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:02 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:02 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:02 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:02 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:02 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:02 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:02 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:02 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:02 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:02 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:02 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:02 +0000
+
+
+Started GET "/articles/1" for 126.69.111.36 at 2014-11-15 19:38:05 +0000
+Processing by ArticlesController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mArticle Load (0.3ms)[0m  [1mSELECT  "articles".* FROM "articles"  WHERE "articles"."id" = ? LIMIT 1[0m  [["id", 1]]
+  [1m[35mTag Load (0.3ms)[0m  SELECT "tags".* FROM "tags" INNER JOIN "taggings" ON "tags"."id" = "taggings"."tag_id" WHERE "taggings"."article_id" = ?  [["article_id", 1]]
+  Rendered articles/show.html.erb within layouts/application (16.3ms)
+Completed 200 OK in 138ms (Views: 126.2ms | ActiveRecord: 2.1ms)
+
+
+Started GET "/" for 126.69.111.36 at 2014-11-15 19:38:09 +0000
+Processing by ArticlesController#index as HTML
+  [1m[36mArticle Load (0.3ms)[0m  [1mSELECT "articles".* FROM "articles"[0m
+  Rendered articles/index.html.erb within layouts/application (1.1ms)
+Completed 200 OK in 97ms (Views: 95.1ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:09 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:09 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:09 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:09 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:09 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:09 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:09 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:09 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:09 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:09 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:09 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:09 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:09 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:09 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:09 +0000
+
+
+Started GET "/articles/1" for 126.69.111.36 at 2014-11-15 19:38:13 +0000
+Processing by ArticlesController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[35mArticle Load (0.2ms)[0m  SELECT  "articles".* FROM "articles"  WHERE "articles"."id" = ? LIMIT 1  [["id", 1]]
+  [1m[36mTag Load (0.2ms)[0m  [1mSELECT "tags".* FROM "tags" INNER JOIN "taggings" ON "tags"."id" = "taggings"."tag_id" WHERE "taggings"."article_id" = ?[0m  [["article_id", 1]]
+  Rendered articles/show.html.erb within layouts/application (2.0ms)
+Completed 200 OK in 105ms (Views: 102.2ms | ActiveRecord: 0.4ms)
+
+
+Started GET "/login" for 126.69.111.36 at 2014-11-15 19:38:15 +0000
+Processing by AuthorSessionsController#new as HTML
+  Rendered author_sessions/new.html.erb within layouts/application (1.5ms)
+Completed 200 OK in 112ms (Views: 111.2ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/articles" for 126.69.111.36 at 2014-11-15 19:38:17 +0000
+Processing by ArticlesController#index as HTML
+  [1m[35mArticle Load (0.3ms)[0m  SELECT "articles".* FROM "articles"
+  Rendered articles/index.html.erb within layouts/application (2.0ms)
+Completed 200 OK in 108ms (Views: 106.1ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/articles/1" for 126.69.111.36 at 2014-11-15 19:38:20 +0000
+Processing by ArticlesController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mArticle Load (0.2ms)[0m  [1mSELECT  "articles".* FROM "articles"  WHERE "articles"."id" = ? LIMIT 1[0m  [["id", 1]]
+  [1m[35mTag Load (0.2ms)[0m  SELECT "tags".* FROM "tags" INNER JOIN "taggings" ON "tags"."id" = "taggings"."tag_id" WHERE "taggings"."article_id" = ?  [["article_id", 1]]
+  Rendered articles/show.html.erb within layouts/application (1.9ms)
+Completed 200 OK in 142ms (Views: 139.1ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/login" for 126.69.111.36 at 2014-11-15 19:38:23 +0000
+Processing by AuthorSessionsController#new as HTML
+  Rendered author_sessions/new.html.erb within layouts/application (1.0ms)
+Completed 200 OK in 105ms (Views: 103.7ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/author_sessions" for 126.69.111.36 at 2014-11-15 19:38:29 +0000
+Processing by AuthorSessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"tWeFtnWVEqqiwJetXdwfC5LotNLHHLGd0IJn4Zt0te0=", "email"=>"admin@admin.com", "password"=>"[FILTERED]", "commit"=>"Login"}
+  [1m[36mAuthor Load (0.3ms)[0m  [1mSELECT  "authors".* FROM "authors"  WHERE (email = 'admin@admin.com')  ORDER BY "authors"."id" ASC LIMIT 1[0m
+Redirected to https://rails-tutorial-johnwquarles.c9.io/authors
+Completed 302 Found in 152ms (ActiveRecord: 1.1ms)
+
+
+Started GET "/authors" for 126.69.111.36 at 2014-11-15 19:38:29 +0000
+Processing by AuthorsController#index as HTML
+  [1m[35mAuthor Load (0.3ms)[0m  SELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1
+  [1m[36mAuthor Load (0.2ms)[0m  [1mSELECT "authors".* FROM "authors"[0m
+  Rendered authors/index.html.erb within layouts/application (2.4ms)
+Completed 200 OK in 110ms (Views: 107.2ms | ActiveRecord: 0.5ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:30 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:30 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:30 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:30 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:30 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:30 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:30 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:30 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:30 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:30 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:30 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:30 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:30 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:30 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:30 +0000
+
+
+Started GET "/" for 126.69.111.36 at 2014-11-15 19:38:41 +0000
+Processing by ArticlesController#index as HTML
+  [1m[35mArticle Load (0.3ms)[0m  SELECT "articles".* FROM "articles"
+  [1m[36mAuthor Load (0.3ms)[0m  [1mSELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1[0m
+  Rendered articles/index.html.erb within layouts/application (2.5ms)
+Completed 200 OK in 108ms (Views: 105.4ms | ActiveRecord: 0.6ms)
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:41 +0000
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:42 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:42 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:42 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:42 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:42 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:42 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:42 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:42 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:42 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:42 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:42 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:42 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:42 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:42 +0000
+
+
+Started GET "/authors" for 126.69.111.36 at 2014-11-15 19:38:47 +0000
+Processing by AuthorsController#index as HTML
+  [1m[35mAuthor Load (0.3ms)[0m  SELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1
+  [1m[36mAuthor Load (0.2ms)[0m  [1mSELECT "authors".* FROM "authors"[0m
+  Rendered authors/index.html.erb within layouts/application (1.9ms)
+Completed 200 OK in 103ms (Views: 99.9ms | ActiveRecord: 0.5ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:48 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:48 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:48 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:48 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:48 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:48 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:48 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:48 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:48 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:48 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:48 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:48 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:48 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:48 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:48 +0000
+
+
+Started GET "/" for 126.69.111.36 at 2014-11-15 19:38:54 +0000
+Processing by ArticlesController#index as HTML
+  [1m[35mArticle Load (0.3ms)[0m  SELECT "articles".* FROM "articles"
+  [1m[36mAuthor Load (0.3ms)[0m  [1mSELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1[0m
+  Rendered articles/index.html.erb within layouts/application (2.5ms)
+Completed 200 OK in 96ms (Views: 94.0ms | ActiveRecord: 0.5ms)
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:54 +0000
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:54 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:54 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:54 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:54 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:54 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:38:54 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:54 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:54 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:54 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:54 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:54 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:54 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:54 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:38:54 +0000
+
+
+Started GET "/articles/1" for 126.69.111.36 at 2014-11-15 19:38:55 +0000
+Processing by ArticlesController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[35mArticle Load (0.3ms)[0m  SELECT  "articles".* FROM "articles"  WHERE "articles"."id" = ? LIMIT 1  [["id", 1]]
+  [1m[36mTag Load (0.1ms)[0m  [1mSELECT "tags".* FROM "tags" INNER JOIN "taggings" ON "tags"."id" = "taggings"."tag_id" WHERE "taggings"."article_id" = ?[0m  [["article_id", 1]]
+  [1m[35mAuthor Load (0.2ms)[0m  SELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "comments"  WHERE "comments"."article_id" = ?[0m  [["article_id", 1]]
+  Rendered articles/_comment.html.erb (0.0ms)
+  Rendered comments/_form.html.erb (2.2ms)
+  Rendered articles/show.html.erb within layouts/application (10.8ms)
+Completed 200 OK in 110ms (Views: 106.7ms | ActiveRecord: 0.8ms)
+
+
+Started GET "/logout" for 126.69.111.36 at 2014-11-15 19:39:04 +0000
+Processing by AuthorSessionsController#destroy as HTML
+  [1m[35mAuthor Load (0.3ms)[0m  SELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1
+Redirected to https://rails-tutorial-johnwquarles.c9.io/authors
+Completed 302 Found in 3ms (ActiveRecord: 0.3ms)
+
+
+Started GET "/authors" for 126.69.111.36 at 2014-11-15 19:39:04 +0000
+Processing by AuthorsController#index as HTML
+Redirected to https://rails-tutorial-johnwquarles.c9.io/
+Filter chain halted as :require_login rendered or redirected
+Completed 302 Found in 2ms (ActiveRecord: 0.0ms)
+
+
+Started GET "/" for 126.69.111.36 at 2014-11-15 19:39:04 +0000
+Processing by ArticlesController#index as HTML
+  [1m[36mArticle Load (0.4ms)[0m  [1mSELECT "articles".* FROM "articles"[0m
+  Rendered articles/index.html.erb within layouts/application (1.8ms)
+Completed 200 OK in 105ms (Views: 102.9ms | ActiveRecord: 0.4ms)
+
+
+Started GET "/articles/1" for 126.69.111.36 at 2014-11-15 19:39:06 +0000
+Processing by ArticlesController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[35mArticle Load (0.2ms)[0m  SELECT  "articles".* FROM "articles"  WHERE "articles"."id" = ? LIMIT 1  [["id", 1]]
+  [1m[36mTag Load (0.1ms)[0m  [1mSELECT "tags".* FROM "tags" INNER JOIN "taggings" ON "tags"."id" = "taggings"."tag_id" WHERE "taggings"."article_id" = ?[0m  [["article_id", 1]]
+  Rendered articles/show.html.erb within layouts/application (2.0ms)
+Completed 200 OK in 108ms (Views: 105.7ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/login" for 126.69.111.36 at 2014-11-15 19:39:11 +0000
+Processing by AuthorSessionsController#new as HTML
+  Rendered author_sessions/new.html.erb within layouts/application (1.2ms)
+Completed 200 OK in 97ms (Views: 95.3ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/author_sessions" for 126.69.111.36 at 2014-11-15 19:39:17 +0000
+Processing by AuthorSessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"WY7DZPSoV+67sC0cvWrq9z3JyOq8B5vPE44cbtxsiYw=", "email"=>"admin@admin.com", "password"=>"[FILTERED]", "commit"=>"Login"}
+  [1m[35mAuthor Load (0.4ms)[0m  SELECT  "authors".* FROM "authors"  WHERE (email = 'admin@admin.com')  ORDER BY "authors"."id" ASC LIMIT 1
+Redirected to https://rails-tutorial-johnwquarles.c9.io/authors
+Completed 302 Found in 141ms (ActiveRecord: 0.4ms)
+
+
+Started GET "/authors" for 126.69.111.36 at 2014-11-15 19:39:17 +0000
+Processing by AuthorsController#index as HTML
+  [1m[36mAuthor Load (0.4ms)[0m  [1mSELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1[0m
+  [1m[35mAuthor Load (0.2ms)[0m  SELECT "authors".* FROM "authors"
+  Rendered authors/index.html.erb within layouts/application (2.0ms)
+Completed 200 OK in 111ms (Views: 107.9ms | ActiveRecord: 0.6ms)
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:17 +0000
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:17 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:17 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:17 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:17 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:17 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:17 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:17 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:17 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:17 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:17 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:17 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:17 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:17 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:17 +0000
+
+
+Started GET "/" for 126.69.111.36 at 2014-11-15 19:39:26 +0000
+Processing by ArticlesController#index as HTML
+  [1m[36mArticle Load (0.3ms)[0m  [1mSELECT "articles".* FROM "articles"[0m
+  [1m[35mAuthor Load (0.2ms)[0m  SELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1
+  Rendered articles/index.html.erb within layouts/application (2.2ms)
+Completed 200 OK in 107ms (Views: 104.7ms | ActiveRecord: 0.5ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:26 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:26 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:26 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:26 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:26 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:26 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:26 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:26 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:26 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:26 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:26 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:26 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:26 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:26 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:26 +0000
+
+
+Started GET "/articles/1" for 126.69.111.36 at 2014-11-15 19:39:28 +0000
+Processing by ArticlesController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mArticle Load (0.3ms)[0m  [1mSELECT  "articles".* FROM "articles"  WHERE "articles"."id" = ? LIMIT 1[0m  [["id", 1]]
+  [1m[35mTag Load (0.2ms)[0m  SELECT "tags".* FROM "tags" INNER JOIN "taggings" ON "tags"."id" = "taggings"."tag_id" WHERE "taggings"."article_id" = ?  [["article_id", 1]]
+  [1m[36mAuthor Load (0.2ms)[0m  [1mSELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1[0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "comments"  WHERE "comments"."article_id" = ?  [["article_id", 1]]
+  Rendered articles/_comment.html.erb (0.0ms)
+  Rendered comments/_form.html.erb (1.3ms)
+  Rendered articles/show.html.erb within layouts/application (9.0ms)
+Completed 200 OK in 108ms (Views: 104.3ms | ActiveRecord: 0.8ms)
+
+
+Started GET "/" for 126.69.111.36 at 2014-11-15 19:39:31 +0000
+Processing by ArticlesController#index as HTML
+  [1m[36mArticle Load (0.3ms)[0m  [1mSELECT "articles".* FROM "articles"[0m
+  [1m[35mAuthor Load (0.2ms)[0m  SELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1
+  Rendered articles/index.html.erb within layouts/application (2.5ms)
+Completed 200 OK in 96ms (Views: 93.8ms | ActiveRecord: 0.5ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:31 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:31 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:31 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:31 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:31 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:31 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:32 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:32 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:32 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:32 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:32 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:32 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:32 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:32 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:32 +0000
+
+
+Started GET "/articles/new" for 126.69.111.36 at 2014-11-15 19:39:32 +0000
+Processing by ArticlesController#new as HTML
+  [1m[36mAuthor Load (0.3ms)[0m  [1mSELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1[0m
+  Rendered articles/_form.html.erb (4.0ms)
+  Rendered articles/new.html.erb within layouts/application (5.6ms)
+Completed 200 OK in 101ms (Views: 98.9ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/" for 126.69.111.36 at 2014-11-15 19:39:44 +0000
+Processing by ArticlesController#index as HTML
+  [1m[35mArticle Load (0.3ms)[0m  SELECT "articles".* FROM "articles"
+  [1m[36mAuthor Load (0.2ms)[0m  [1mSELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1[0m
+  Rendered articles/index.html.erb within layouts/application (2.5ms)
+Completed 200 OK in 108ms (Views: 106.2ms | ActiveRecord: 0.5ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:44 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:44 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:44 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:44 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:44 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:44 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:39:44 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:44 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:44 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:44 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:44 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:44 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:44 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:44 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:39:44 +0000
+
+
+Started GET "/articles/1" for 126.69.111.36 at 2014-11-15 19:40:09 +0000
+Processing by ArticlesController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[35mArticle Load (0.2ms)[0m  SELECT  "articles".* FROM "articles"  WHERE "articles"."id" = ? LIMIT 1  [["id", 1]]
+  [1m[36mTag Load (0.1ms)[0m  [1mSELECT "tags".* FROM "tags" INNER JOIN "taggings" ON "tags"."id" = "taggings"."tag_id" WHERE "taggings"."article_id" = ?[0m  [["article_id", 1]]
+  [1m[35mAuthor Load (0.4ms)[0m  SELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "comments"  WHERE "comments"."article_id" = ?[0m  [["article_id", 1]]
+  Rendered articles/_comment.html.erb (0.0ms)
+  Rendered comments/_form.html.erb (1.6ms)
+  Rendered articles/show.html.erb within layouts/application (11.1ms)
+Completed 200 OK in 120ms (Views: 116.3ms | ActiveRecord: 0.9ms)
+
+
+Started GET "/" for 126.69.111.36 at 2014-11-15 19:41:16 +0000
+Processing by ArticlesController#index as HTML
+  [1m[35mArticle Load (0.4ms)[0m  SELECT "articles".* FROM "articles"
+  [1m[36mAuthor Load (0.3ms)[0m  [1mSELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1[0m
+  Rendered articles/index.html.erb within layouts/application (2.9ms)
+Completed 200 OK in 118ms (Views: 115.8ms | ActiveRecord: 0.6ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:41:16 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:41:16 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:41:16 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:41:16 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:41:16 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:41:16 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:41:16 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:41:16 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:41:16 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:41:16 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:41:16 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:41:16 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:41:16 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:41:16 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:41:16 +0000
+
+
+Started GET "/logout" for 126.69.111.36 at 2014-11-15 19:41:22 +0000
+Processing by AuthorSessionsController#destroy as HTML
+  [1m[35mAuthor Load (0.3ms)[0m  SELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1
+Redirected to https://rails-tutorial-johnwquarles.c9.io/authors
+Completed 302 Found in 3ms (ActiveRecord: 0.3ms)
+
+
+Started GET "/authors" for 126.69.111.36 at 2014-11-15 19:41:22 +0000
+Processing by AuthorsController#index as HTML
+Redirected to https://rails-tutorial-johnwquarles.c9.io/
+Filter chain halted as :require_login rendered or redirected
+Completed 302 Found in 2ms (ActiveRecord: 0.0ms)
+
+
+Started GET "/" for 126.69.111.36 at 2014-11-15 19:41:22 +0000
+Processing by ArticlesController#index as HTML
+  [1m[36mArticle Load (0.3ms)[0m  [1mSELECT "articles".* FROM "articles"[0m
+  Rendered articles/index.html.erb within layouts/application (1.3ms)
+Completed 200 OK in 96ms (Views: 94.8ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/login" for 126.69.111.36 at 2014-11-15 19:44:44 +0000
+Processing by AuthorSessionsController#new as HTML
+  Rendered author_sessions/new.html.erb within layouts/application (1.4ms)
+Completed 200 OK in 100ms (Views: 98.9ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/author_sessions" for 126.69.111.36 at 2014-11-15 19:44:47 +0000
+Processing by AuthorSessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"Ce/ZeuW/7FsL8WFdBU+dM0FG/1f5u7NT3O5Q0aEL724=", "email"=>"asdfasdfasdf", "password"=>"[FILTERED]", "commit"=>"Login"}
+  [1m[35mAuthor Load (0.3ms)[0m  SELECT  "authors".* FROM "authors"  WHERE (email = 'asdfasdfasdf')  ORDER BY "authors"."id" ASC LIMIT 1
+  Rendered author_sessions/new.html.erb within layouts/application (1.5ms)
+Completed 200 OK in 108ms (Views: 105.8ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:44:47 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:44:47 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:44:47 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:44:47 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:44:47 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:44:47 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:44:47 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:44:47 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:44:47 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:44:47 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:44:47 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:44:47 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:44:47 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:44:47 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:44:47 +0000
+
+
+Started POST "/author_sessions" for 126.69.111.36 at 2014-11-15 19:45:01 +0000
+Processing by AuthorSessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"Ce/ZeuW/7FsL8WFdBU+dM0FG/1f5u7NT3O5Q0aEL724=", "email"=>"admin@admin.com", "password"=>"[FILTERED]", "commit"=>"Login"}
+  [1m[36mAuthor Load (0.3ms)[0m  [1mSELECT  "authors".* FROM "authors"  WHERE (email = 'admin@admin.com')  ORDER BY "authors"."id" ASC LIMIT 1[0m
+Redirected to https://rails-tutorial-johnwquarles.c9.io/authors
+Completed 302 Found in 148ms (ActiveRecord: 0.3ms)
+
+
+Started GET "/authors" for 126.69.111.36 at 2014-11-15 19:45:01 +0000
+Processing by AuthorsController#index as HTML
+  [1m[35mAuthor Load (0.3ms)[0m  SELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1
+  [1m[36mAuthor Load (0.3ms)[0m  [1mSELECT "authors".* FROM "authors"[0m
+  Rendered authors/index.html.erb within layouts/application (2.1ms)
+Completed 200 OK in 105ms (Views: 102.0ms | ActiveRecord: 0.5ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:45:01 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:45:01 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:45:01 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:45:01 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:45:01 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:45:01 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:45:01 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:45:01 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:45:01 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:45:01 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:45:01 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:45:01 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:45:01 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:45:01 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:45:01 +0000
+
+
+Started GET "/logout" for 126.69.111.36 at 2014-11-15 19:50:44 +0000
+Processing by AuthorSessionsController#destroy as HTML
+  [1m[35mAuthor Load (0.3ms)[0m  SELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1
+Redirected to https://rails-tutorial-johnwquarles.c9.io/authors
+Completed 302 Found in 3ms (ActiveRecord: 0.3ms)
+
+
+Started GET "/authors" for 126.69.111.36 at 2014-11-15 19:50:44 +0000
+Processing by AuthorsController#index as HTML
+Redirected to https://rails-tutorial-johnwquarles.c9.io/
+Filter chain halted as :require_login rendered or redirected
+Completed 302 Found in 2ms (ActiveRecord: 0.0ms)
+
+
+Started GET "/" for 126.69.111.36 at 2014-11-15 19:50:44 +0000
+Processing by ArticlesController#index as HTML
+  [1m[36mArticle Load (0.3ms)[0m  [1mSELECT "articles".* FROM "articles"[0m
+  Rendered articles/index.html.erb within layouts/application (1.3ms)
+Completed 200 OK in 100ms (Views: 98.5ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/" for 126.69.111.36 at 2014-11-15 19:50:47 +0000
+Processing by ArticlesController#index as HTML
+  [1m[35mArticle Load (0.3ms)[0m  SELECT "articles".* FROM "articles"
+  Rendered articles/index.html.erb within layouts/application (1.3ms)
+Completed 200 OK in 93ms (Views: 91.1ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:50:47 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:50:47 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:50:47 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:50:47 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:50:47 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:50:47 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:50:47 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:50:47 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:50:47 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:50:47 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:50:47 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:50:47 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:50:47 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:50:47 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:50:47 +0000
+
+
+Started GET "/login" for 126.69.111.36 at 2014-11-15 19:50:49 +0000
+Processing by AuthorSessionsController#new as HTML
+  Rendered author_sessions/new.html.erb within layouts/application (1.0ms)
+Completed 200 OK in 92ms (Views: 90.4ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/author_sessions" for 126.69.111.36 at 2014-11-15 19:50:55 +0000
+Processing by AuthorSessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"glM2+CHLfg2Tvja5AonV/LVGtLTuWUQ5842uFrTEYps=", "email"=>"asdfasdfasdf", "password"=>"[FILTERED]", "commit"=>"Login"}
+  [1m[36mAuthor Load (0.3ms)[0m  [1mSELECT  "authors".* FROM "authors"  WHERE (email = 'asdfasdfasdf')  ORDER BY "authors"."id" ASC LIMIT 1[0m
+  Rendered author_sessions/new.html.erb within layouts/application (0.8ms)
+Completed 200 OK in 99ms (Views: 96.8ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:50:55 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:50:55 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:50:55 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:50:55 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:50:55 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:50:55 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:50:55 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:50:55 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:50:55 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:50:55 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:50:55 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:50:55 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:50:55 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:50:55 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:50:55 +0000
+
+
+Started POST "/author_sessions" for 126.69.111.36 at 2014-11-15 19:51:01 +0000
+Processing by AuthorSessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"glM2+CHLfg2Tvja5AonV/LVGtLTuWUQ5842uFrTEYps=", "email"=>"admin@admin.com", "password"=>"[FILTERED]", "commit"=>"Login"}
+  [1m[35mAuthor Load (0.3ms)[0m  SELECT  "authors".* FROM "authors"  WHERE (email = 'admin@admin.com')  ORDER BY "authors"."id" ASC LIMIT 1
+  Rendered author_sessions/new.html.erb within layouts/application (0.9ms)
+Completed 200 OK in 245ms (Views: 101.2ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:51:02 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:51:02 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:51:02 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:51:02 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:51:02 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:51:02 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:51:02 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:51:02 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:51:02 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:51:02 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:51:02 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:51:02 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:51:02 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:51:02 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:51:02 +0000
+
+
+Started POST "/author_sessions" for 126.69.111.36 at 2014-11-15 19:51:11 +0000
+Processing by AuthorSessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"glM2+CHLfg2Tvja5AonV/LVGtLTuWUQ5842uFrTEYps=", "email"=>"admin@admin.com", "password"=>"[FILTERED]", "commit"=>"Login"}
+  [1m[36mAuthor Load (0.3ms)[0m  [1mSELECT  "authors".* FROM "authors"  WHERE (email = 'admin@admin.com')  ORDER BY "authors"."id" ASC LIMIT 1[0m
+Redirected to https://rails-tutorial-johnwquarles.c9.io/authors
+Completed 302 Found in 143ms (ActiveRecord: 0.3ms)
+
+
+Started GET "/authors" for 126.69.111.36 at 2014-11-15 19:51:11 +0000
+Processing by AuthorsController#index as HTML
+  [1m[35mAuthor Load (0.3ms)[0m  SELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1
+  [1m[36mAuthor Load (0.3ms)[0m  [1mSELECT "authors".* FROM "authors"[0m
+  Rendered authors/index.html.erb within layouts/application (2.0ms)
+Completed 200 OK in 100ms (Views: 97.6ms | ActiveRecord: 0.6ms)
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:51:11 +0000
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:51:11 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:51:11 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:51:11 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:51:11 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:51:11 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:51:11 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:51:11 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:51:11 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:51:11 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:51:11 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:51:11 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:51:11 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:51:11 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:51:11 +0000
+
+
+Started GET "/" for 126.69.111.36 at 2014-11-15 19:51:18 +0000
+Processing by ArticlesController#index as HTML
+  [1m[35mArticle Load (0.3ms)[0m  SELECT "articles".* FROM "articles"
+  [1m[36mAuthor Load (0.2ms)[0m  [1mSELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1[0m
+  Rendered articles/index.html.erb within layouts/application (2.4ms)
+Completed 200 OK in 105ms (Views: 102.8ms | ActiveRecord: 0.5ms)
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 19:51:19 +0000
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 19:51:19 +0000
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 19:51:19 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 19:51:19 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 19:51:19 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 19:51:19 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 19:51:19 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 19:51:19 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 19:51:19 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 19:51:19 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 19:51:19 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 19:51:19 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 19:51:19 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 19:51:19 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 19:51:19 +0000
+
+
+Started GET "/articles/1" for 126.69.111.36 at 2014-11-15 19:51:20 +0000
+Processing by ArticlesController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[35mArticle Load (0.2ms)[0m  SELECT  "articles".* FROM "articles"  WHERE "articles"."id" = ? LIMIT 1  [["id", 1]]
+  [1m[36mTag Load (0.2ms)[0m  [1mSELECT "tags".* FROM "tags" INNER JOIN "taggings" ON "tags"."id" = "taggings"."tag_id" WHERE "taggings"."article_id" = ?[0m  [["article_id", 1]]
+  [1m[35mAuthor Load (0.3ms)[0m  SELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1
+  [1m[36m (0.1ms)[0m  [1mSELECT COUNT(*) FROM "comments"  WHERE "comments"."article_id" = ?[0m  [["article_id", 1]]
+  Rendered articles/_comment.html.erb (0.0ms)
+  Rendered comments/_form.html.erb (1.5ms)
+  Rendered articles/show.html.erb within layouts/application (8.8ms)
+Completed 200 OK in 114ms (Views: 110.4ms | ActiveRecord: 0.8ms)
