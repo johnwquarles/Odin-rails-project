@@ -3173,3 +3173,56 @@ Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 21:26:14 +0
 
 
 Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 21:26:14 +0000
+
+
+Started GET "/tags" for 126.69.111.36 at 2014-11-15 21:46:08 +0000
+Processing by TagsController#index as HTML
+  [1m[36mTag Load (0.3ms)[0m  [1mSELECT "tags".* FROM "tags"[0m
+  [1m[35mAuthor Load (0.2ms)[0m  SELECT  "authors".* FROM "authors"  WHERE "authors"."id" = 1 LIMIT 1
+  Rendered tags/index.html.erb within layouts/application (3.0ms)
+Completed 200 OK in 115ms (Views: 113.1ms | ActiveRecord: 0.5ms)
+
+
+Started GET "/assets/author_sessions.css?body=1" for 126.69.111.36 at 2014-11-15 21:46:09 +0000
+
+
+Started GET "/assets/articles.css?body=1" for 126.69.111.36 at 2014-11-15 21:46:09 +0000
+
+
+Started GET "/assets/styles.css?body=1" for 126.69.111.36 at 2014-11-15 21:46:09 +0000
+
+
+Started GET "/assets/screen.css?body=1" for 126.69.111.36 at 2014-11-15 21:46:09 +0000
+
+
+Started GET "/assets/comments.css?body=1" for 126.69.111.36 at 2014-11-15 21:46:09 +0000
+
+
+Started GET "/assets/tags.css?body=1" for 126.69.111.36 at 2014-11-15 21:46:09 +0000
+
+
+Started GET "/assets/application.css?body=1" for 126.69.111.36 at 2014-11-15 21:46:09 +0000
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 126.69.111.36 at 2014-11-15 21:46:09 +0000
+
+
+Started GET "/assets/turbolinks.js?body=1" for 126.69.111.36 at 2014-11-15 21:46:09 +0000
+
+
+Started GET "/assets/articles.js?body=1" for 126.69.111.36 at 2014-11-15 21:46:09 +0000
+
+
+Started GET "/assets/author_sessions.js?body=1" for 126.69.111.36 at 2014-11-15 21:46:09 +0000
+
+
+Started GET "/assets/comments.js?body=1" for 126.69.111.36 at 2014-11-15 21:46:09 +0000
+
+
+Started GET "/assets/tags.js?body=1" for 126.69.111.36 at 2014-11-15 21:46:09 +0000
+
+
+Started GET "/assets/application.js?body=1" for 126.69.111.36 at 2014-11-15 21:46:09 +0000
+
+
+Started GET "/assets/jquery.js?body=1" for 126.69.111.36 at 2014-11-15 21:46:09 +0000
